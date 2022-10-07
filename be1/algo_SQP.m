@@ -124,11 +124,41 @@ hcdex           = feval(h_des_c,tempx)                                     ;
 
 k               = 0                                                        ;
 fin             = 0                                                        ;
-while(fin==0 && k < un_nit_max)
+
+Pzeros = zeros(p);
     
-    %
-    %  A COMPLETER 
-    %
+while(fin==0)
+    
+    fdex = feval(une_f,tempx);
+    cdex = feval(des_c,tempx);
+    
+    gfdex = feval(un_gf,tempx);
+    jcdex = feval(jac_des_c,tempx);
+    
+    hfdex = feval(un_hf,tempx);
+    hcdex = feval(h_des_c,tempx);
+
+    H_L = hfdex + hcdex*templambda;
+    M = [H_L, jcdex'; jcdex, Pzeros];
+    B = [-gfdex; -cdex];
+    X = M\B;
+    dk = X(1:n);
+    
+    tempx = tempx + dk;
+    templambda = X(n+1:end);
+    
+    gldex = gfdex + jcdex*templambda;
+    
+    if norm(dk) < une_tol_x
+        fin = 1;
+        % Insert patience criteria
+    end
+    
+    if norm(gldex) < une_tol_g
+        fin = 2;
+        % Insert patience criteria
+    end
+            
  
  
     if(k==un_nit_max)
