@@ -146,8 +146,8 @@ while(fin==0)
     
     tempx = tempx + dk;
     templambda = X(n+1:end);
-    
-    gldex = gfdex + jcdex*templambda;
+    gldex = gfdex + jcdex'*templambda;
+    %gldex = gfdex + jcdex*templambda;
     
     if norm(dk) < une_tol_x
         fin = 1;
