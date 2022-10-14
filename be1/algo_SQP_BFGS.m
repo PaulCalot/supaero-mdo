@@ -105,8 +105,8 @@ hc_count   = 0                                                             ;
 tempx           = un_x0'                                                   ;
 templambda      = un_lambda0'                                              ;
 
-n               = length(tempx   )                                         ;
-p               = length(templambda   )                                    ;
+n               = length(tempx)                                            ;
+p               = length(templambda)                                       ;
 
 % Evaluer notre Lagrangien
 fdex            = feval(une_f,tempx)                                       ;
@@ -115,70 +115,65 @@ cdex            = feval(des_c,tempx)                                       ;
 % Evaluer le gradient de notre Lagrangian
 gfdex           = feval(un_gf,tempx)                                       ;
 jcdex           = feval(jac_des_c,tempx)                                   ;
-
+gldex = gfdex + jcdex'*templambda;
 
 % Evaluer le Hessien de notre Lagrangian
 H               = H0                                                       ;
-k               = 0                                                        ;
+k               = 0                                                       ;
 fin             = 0                                                        ;
-tempdx = zeros(size(tempx));
-gldex_old = zeros(size(tempx));
 Pzeros = zeros(p);
 
+% first turn so everything is correctly initialized and we can compute
+% difference
+M = [H, jcdex'; jcdex, Pzeros];
+B = [-gfdex; -cdex];
+X = M\B; % d and lambda
+
+% after that every thing is correctly initialized
 while(fin==0)
+    k = k +1 ;
+    dk = X(1:n); 
+    templambda = X(n+1:end);
+    tempx = tempx + dk;
+    tempdx = dk;
+
     fdex = feval(une_f,tempx);
     cdex = feval(des_c,tempx);
     
     gfdex = feval(un_gf,tempx);
     jcdex = feval(jac_des_c,tempx);
    
+    gldex_old = gldex;
     gldex = gfdex + jcdex'*templambda;
     ykm1 = gldex - gldex_old;
-    
-    gldex_old = gldex;
        
     if ykm1' * tempdx > 0
-        disp("IF")
-%         disp(un_x0)
-%         disp(H);
         H = H + ( ...
-            ykm1' * ykm1)/(ykm1' * tempdx) - ( ...
+            ykm1 * ykm1')/(ykm1' * tempdx) - ( ...
             H * (tempdx * tempdx') * H)/(tempdx' * H * tempdx);
-%         disp(H);
-    % else we do HL_k  = HL_k so nothing
     end
     
-    %     hfdex = feval(un_hf,tempx);
-    %     hcdex = feval(h_des_c,tempx);
-    % 
-    %     H_L = hfdex + hcdex*templambda;
     M = [H, jcdex'; jcdex, Pzeros];
     B = [-gfdex; -cdex];
-    X = M\B;
-    dk = X(1:n);
+    X = M\B; % d and lambda
     
-    tempx = tempx + dk;
-    tempdx = dk;
-    templambda = X(n+1:end);
+    %     if norm(dk) < une_tol_x
+    %         fin = 1;
+    %         % Insert patience criteria
+    %     end
     
-    disp(k);
-    disp(dk);
-    disp(M)
-    disp(X)
-    if norm(dk) < une_tol_x
-        fin = 1;
-        % Insert patience criteria
-    end
-    
-    if norm(gldex) < une_tol_g
+    if (norm(gldex) < une_tol_g) && (norm(dk) < une_tol_x)
         fin = 2;
         % Insert patience criteria
     end
     if(k==un_nit_max)
         fin =  3                                                           ;
     end
-    k = k +1 ;
+    
 end        
 x_opt    =   tempx                                                         ;
 f_opt    =    fdex                                                         ;
 nit      =   k                                                             ;
+display(tempx);
+display(gldex);
+display(dk);
