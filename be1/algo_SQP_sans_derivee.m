@@ -53,8 +53,8 @@ function [                                                             ...
     x_opt  ,                                                           ...
     f_opt  ,                                                           ...
     fin    ,                                                           ...
-    nit                                                                ...
-    ]                                                                  ...
+    nit    ,                                                            ...
+    x_seq]                                                                  ...
     = algo_SQP_BFGS(                                ...
     une_f          ,                                ...
     des_c          ,                                ...
@@ -108,29 +108,93 @@ fdex            = feval(une_f,tempx)                                       ;
 cdex            = feval(des_c,tempx)                                       ;
 
 % Evaluer le gradient de notre Lagrangian
-
+gfdex           = (jac_fd(une_f,tempx)).';                                       
+jcdex           = jac_fd(des_c,tempx)                                   ;
+gldex = gfdex + jcdex'*templambda;
     
-    %
-    %  A COMPLETER 
-    %
- 
 % Evaluer le Hessien de notre Lagrangian
-H               = H0                                                       ;
+H               = H0;
+k               = 0;
+fin             = 0;
+Pzeros = zeros(p);
 
-k               = 0                                                        ;
-fin             = 0                                                        ;
-while(fin==0 && k < un_nit_max)
+% first turn so everything is correctly initialized and we can compute
+% difference
+M = [H, jcdex'; jcdex, Pzeros];
+B = [-gfdex; -cdex];
+X = M\B; % d and lambda
+
+x_seq = tempx';
+
+while(fin==0)
+    k = k + 1;
+%     if isequal(k/10,round(k/10))
+%         disp(k)
+%     end
+    dk = X(1:n); 
+    templambda = X(n+1:end);
+    tempx = tempx + dk;
+    tempdx = dk;
+
+    x_seq = [x_seq; tempx'];
     
-     
-    %
-    %  A COMPLETER 
-    %
- 
+    fdex = feval(une_f,tempx);
+    cdex = feval(des_c,tempx);
+    
+    gfdex = (jac_fd(une_f,tempx)).';                                       
+    jcdex = jac_fd(des_c,tempx);
+   
+    gldex_old = gldex;
+    gldex = gfdex + jcdex'*templambda;
+    ykm1 = gldex - gldex_old;
+       
+    if ykm1' * tempdx > 0
+        H = H + ( ...
+            ykm1 * ykm1')/(ykm1' * tempdx) - ( ...
+            H * (tempdx * tempdx') * H)/(tempdx' * H * tempdx);
+    end
+    
+    M = [H, jcdex'; jcdex, Pzeros];
+    B = [-gfdex; -cdex];
+    X = M\B; % d and lambda
+
+    if (norm(gldex) < une_tol_g) && (norm(dk) < une_tol_x)
+        fin = 2;
+        % Insert patience criteria
+    end    
+
     if(k==un_nit_max)
         fin =  3                                                           ;
     end
-    k = k +1 ;
+    
 end
 x_opt    =   tempx                                                         ;
 f_opt    =    fdex                                                         ;
+
+fprintf('The optimal value of x is X = (%6.4f, %6.4f) and the value of f is %6.4f.\n\n',x_opt(1),x_opt(2),f_opt)
 nit      =   k                                                             ;
+
+end
+
+function jac = jac_fd(fun,X)
+        X = X(:);
+        N = length(X);
+        S = zeros(N,9);
+        funn = @(X)[ones(N,1).*fun(X)];
+        
+        if norm(X,2) < 0.1
+            h = sqrt(eps);
+        else
+            h = sqrt(eps)*norm(X,2);
+        end
+        
+        basis = eye(N).*h;
+        C = [1/280, -4/105, 1/5, -4/5, 0, 4/5, -1/5, 4/105, -1/280];
+       for j = 1:N
+                for kk = 1:9
+                    S(:,kk) = funn(X+(kk-5)*basis(:,j));
+                end
+       end
+       jac = ((S*C')./h).';
+
+end

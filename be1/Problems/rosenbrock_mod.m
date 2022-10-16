@@ -1,5 +1,5 @@
 %*******************************************************************************
-%   Codage de la fonction objectif du probleme 1                               *
+%   Codage de la fonction dite de "rosenbrock"                                 *
 %*****************************************************************************0*
 %                                                    %**************************
 %                                                    % PARAMETRES EN ENTREE    *
@@ -11,15 +11,15 @@
 %                                                    % PARAMETRES EN SORTIE    *
 %                                                    %**************************
 %
-%            fdex                 % f_P1(x)                              %
+%            fdex                 % rosenbrock(x)                              %
 %
-% Responsable: Y. Diouane (youssef.diouane@isae.fr) -- 2019/2020
-% (C) Institut SupÈrieur de l'AÈronautique et de l'Espace (ISAE-SUPAERO)
+% Responsable: Y. Diouane (youssef.diouane@isae.fr) -- 2016/2017
+% (C) Institut Sup√©rieur de l'A√©ronautique et de l'Espace (ISAE-Supa√©ro)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
-function fdex = f_P1(x)        
+function fdex = rosenbrock_mod(x)        
 
 %*****************************
 %     LES DIFFERENTS "OBJETS"*
@@ -29,7 +29,7 @@ function fdex = f_P1(x)
                                                      %**************************
           
           global f_count  ;                  % nombre     d'evaluations de 
-                                             % fdex=f_P1(x) , sans pitie
+                                             % fdex=rosenbrock(x) , sans pitie
 
                                                      %**************************
                                                      % FONCTIONS MATLAB        *
@@ -46,8 +46,8 @@ function fdex = f_P1(x)
  
 
 
-fdex             = x(1).^2 + x(2).^2                                             ;
+fdex             = 100*(x(:,2) - x(:,1).^2).^2 + (1-x(:,1)).^2                          ;
 
-f_count          = f_count   + 1                                               ;
+f_count          = f_count + 1                                               ;
 
 return                                                                         ;
