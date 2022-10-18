@@ -167,7 +167,7 @@ while(fin==0)
     %         % Insert patience criteria
     %     end
     
-    if (norm(gldex) < une_tol_g) && (norm(dk) < une_tol_x)
+    if (norm(gldex) < 0.01*une_tol_g) && (norm(dk) < 0.01*une_tol_x)
         fin = 2;
         % Insert patience criteria
     end

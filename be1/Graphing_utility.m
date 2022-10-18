@@ -29,15 +29,20 @@ function_caller
         [X, Y] = meshgrid(xv,yv);
         Z = f_P1_mod([X(:),Y(:)]);
         Z = reshape(Z,size(X));
-        contourf(X,Y,Z)
-        plot(x_seq_SQP{i}(:,1), x_seq_SQP{i}(:,2),'mo-.','MarkerFaceColor','m','MarkerSize',3,'LineWidth',1.2)
-        plot(x_seq_SQP_BFGS{i}(:,1), x_seq_SQP_BFGS{i}(:,2),'yo-.','MarkerFaceColor','g','MarkerSize',4,'LineWidth',1.2)
-        plot(x_seq_SQP_BFGS_SD{i}(:,1), x_seq_SQP_BFGS_SD{i}(:,2),'yo-.','MarkerFaceColor','y','MarkerSize',5,'LineWidth',1.2)
+        contour(X,Y,Z)
+        
+        plot(0.5,0.5,'Marker','pentagram','MarkerSize',10,'MarkerFaceColor','r','MarkerEdgeColor','r')
+        plot(x_seq_SQP{i}(1:end-1,1), x_seq_SQP{i}(1:end-1,2),'m-.o','MarkerFaceColor','m','MarkerSize',3,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS{i}(1:end-1,1), x_seq_SQP_BFGS{i}(1:end-1,2),'g-.o','MarkerFaceColor','g','MarkerSize',3,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS_SD{i}(1:end-1,1), x_seq_SQP_BFGS_SD{i}(1:end-1,2),'b-.o','MarkerFaceColor','b','MarkerSize',3,'LineWidth',1.2)
         plot(xv,c,'--','LineWidth',1.4,'Color',clr)
 
-        plot(x_seq_SQP{i}(1,1), x_seq_SQP{i}(1,2),'Marker','diamond','MarkerSize',6,'MarkerFaceColor','k','MarkerEdgeColor','k')        
-        plot(0.5,0.5,'Marker','pentagram','MarkerSize',10,'MarkerFaceColor','r','MarkerEdgeColor','r')
-        legl = {'f(X)','SQP','BFGS',' BFGS - FD','c(X)','Start','Target'};
+        plot(x_seq_SQP{i}(1,1), x_seq_SQP{i}(1,2),'Marker','diamond','MarkerSize',6,'MarkerFaceColor','k','MarkerEdgeColor','k')
+        plot(x_seq_SQP{i}(end,1), x_seq_SQP{i}(end,2),'m-x','MarkerFaceColor','m','MarkerSize',10,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS{i}(end,1), x_seq_SQP_BFGS{i}(end,2),'g-x','MarkerFaceColor','g','MarkerSize',10,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS_SD{i}(end,1), x_seq_SQP_BFGS_SD{i}(end,2),'b-x','MarkerFaceColor','b','MarkerSize',10,'LineWidth',1.2)
+        
+        legl = {'f(X)','Target','SQP','BFGS',' BFGS - FD','c(X)','Start'};
         leg = legend(legl,'Location','bestoutside');
 
         axis([-1.5*a 1.5*a -1.5*b 1.5*b])
@@ -70,15 +75,20 @@ function_caller
         [X, Y] = meshgrid(xv,yv);
         Z = f_P1_mod([X(:),Y(:)]);
         Z = reshape(Z,size(X));
-        contourf(X,Y,Z)
-        plot(x_seq_SQP{i}(:,1), x_seq_SQP{i}(:,2),'mo-.','MarkerFaceColor','m','MarkerSize',3)
-        plot(x_seq_SQP_BFGS{i}(:,1), x_seq_SQP_BFGS{i}(:,2),'go-.','MarkerFaceColor','g','MarkerSize',4)
-        plot(x_seq_SQP_BFGS_SD{i}(:,1), x_seq_SQP_BFGS_SD{i}(:,2),'yo-.','MarkerFaceColor','y','MarkerSize',5)
+        contour(X,Y,Z)
+        plot(2.52,2.52,'Marker','pentagram','MarkerSize',10,'MarkerFaceColor','r','MarkerEdgeColor','r')
+
+        plot(x_seq_SQP{i}(1:end-1,1), x_seq_SQP{i}(1:end-1,2),'mo-.','MarkerFaceColor','m','MarkerSize',3,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS{i}(1:end-1,1), x_seq_SQP_BFGS{i}(1:end-1,2),'go-.','MarkerFaceColor','g','MarkerSize',4,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS_SD{i}(1:end-1,1), x_seq_SQP_BFGS_SD{i}(1:end-1,2),'bo-.','MarkerFaceColor','b','MarkerSize',5,'LineWidth',1.2)
         plot(xv,c,'--','LineWidth',1.4,'Color',clr)
         
-        plot(x_seq_SQP{i}(1,1), x_seq_SQP{i}(1,2),'Marker','diamond','MarkerSize',6,'MarkerFaceColor','k','MarkerEdgeColor','k')        
-        plot(2.52,2.52,'Marker','pentagram','MarkerSize',10,'MarkerFaceColor','r','MarkerEdgeColor','r')
-        legl = {'f(X)','SQP','BFGS',' BFGS - FD','c(X)','Start','Target'};
+        plot(x_seq_SQP{i}(1,1), x_seq_SQP{i}(1,2),'Marker','diamond','MarkerSize',6,'MarkerFaceColor','k','MarkerEdgeColor','k')
+        plot(x_seq_SQP{i}(end,1), x_seq_SQP{i}(end,2),'m-x','MarkerFaceColor','m','MarkerSize',10,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS{i}(end,1), x_seq_SQP_BFGS{i}(end,2),'g-x','MarkerFaceColor','g','MarkerSize',10,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS_SD{i}(end,1), x_seq_SQP_BFGS_SD{i}(end,2),'b-x','MarkerFaceColor','b','MarkerSize',10,'LineWidth',1.2)
+        
+        legl = {'f(X)','Target','SQP','BFGS',' BFGS - FD','c(X)','Start'};
         leg = legend(legl,'Location','bestoutside');
 
         axis([-1.5*a 1.5*a -1.5*b 1.5*b])
@@ -111,15 +121,20 @@ clear xv yv
         [X, Y] = meshgrid(xv,yv);
         Z = rosenbrock_mod([X(:),Y(:)]);
         Z = reshape(Z,size(X));
-        contourf(X,Y,Z)
-        plot(x_seq_SQP{i}(:,1), x_seq_SQP{i}(:,2),'mo-.','MarkerFaceColor','m','MarkerSize',3)
-        plot(x_seq_SQP_BFGS{i}(:,1), x_seq_SQP_BFGS{i}(:,2),'go-.','MarkerFaceColor','g','MarkerSize',4)
-        plot(x_seq_SQP_BFGS_SD{i}(:,1), x_seq_SQP_BFGS_SD{i}(:,2),'bo-.','MarkerFaceColor','b','MarkerSize',5)
+        contour(X,Y,Z)
+        
+        plot(0.5,0.5,'Marker','pentagram','MarkerSize',10,'MarkerFaceColor','r','MarkerEdgeColor','r')        
+        plot(x_seq_SQP{i}(1:end-1,1), x_seq_SQP{i}(1:end-1,2),'mo-.','MarkerFaceColor','m','MarkerSize',3,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS{i}(1:end-1,1), x_seq_SQP_BFGS{i}(1:end-1,2),'go-.','MarkerFaceColor','g','MarkerSize',4,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS_SD{i}(1:end-1,1), x_seq_SQP_BFGS_SD{i}(1:end-1,2),'bo-.','MarkerFaceColor','b','MarkerSize',5,'LineWidth',1.2)
         plot(xv,c,'--','LineWidth',1.4,'Color',clr)
 
-        plot(x_seq_SQP{i}(1,1), x_seq_SQP{i}(1,2),'Marker','diamond','MarkerSize',6,'MarkerFaceColor','k','MarkerEdgeColor','k')        
-        plot(0.5,0.5,'Marker','pentagram','MarkerSize',10,'MarkerFaceColor','r','MarkerEdgeColor','r')        
-        legl = {'f(X)','SQP','BFGS',' BFGS - FD','c(X)','Start','Target'};
+        
+        plot(x_seq_SQP{i}(1,1), x_seq_SQP{i}(1,2),'Marker','diamond','MarkerSize',6,'MarkerFaceColor','k','MarkerEdgeColor','k')
+        plot(x_seq_SQP{i}(end,1), x_seq_SQP{i}(end,2),'m-x','MarkerFaceColor','m','MarkerSize',10,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS{i}(end,1), x_seq_SQP_BFGS{i}(end,2),'g-x','MarkerFaceColor','g','MarkerSize',10,'LineWidth',1.2)
+        plot(x_seq_SQP_BFGS_SD{i}(end,1), x_seq_SQP_BFGS_SD{i}(end,2),'b-x','MarkerFaceColor','b','MarkerSize',10,'LineWidth',1.2)        
+        legl = {'f(X)','Target','SQP','BFGS',' BFGS - FD','c(X)','Start'};
         leg = legend(legl,'Location','bestoutside');
 
         axis([-1.5*a 1.5*a -1.5*b 1.5*b])
