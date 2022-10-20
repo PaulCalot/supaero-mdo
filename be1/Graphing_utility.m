@@ -7,7 +7,7 @@
 % real minimum
 clear xv yv
 close all
-clc
+
 
 clr = [0.9290 0.6940 0.1250];
 

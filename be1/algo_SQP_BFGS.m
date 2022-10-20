@@ -162,23 +162,17 @@ while(fin==0)
     B = [-gfdex; -cdex];
     X = M\B; % d and lambda
     
-    %     if norm(dk) < une_tol_x
-    %         fin = 1;
-    %         % Insert patience criteria
-    %     end
-    
-    if (norm(gldex) < 0.01*une_tol_g) && (norm(dk) < 0.01*une_tol_x)
-        fin = 2;
+    if (norm(dk) < une_tol_x) && (norm(feval(des_c,tempx)) < 1e-6) && (norm(gldex) < 0.01*une_tol_g)
+        fin = 1;
         % Insert patience criteria
-    end
+    end     
+    
+    
     if(k==un_nit_max)
-        fin =  3                                                           ;
+        fin = 3;        
     end
     
 end        
 x_opt    =   tempx                                                         ;
 f_opt    =    fdex                                                         ;
 nit      =   k                                                             ;
-display(tempx);
-display(gldex);
-display(dk);

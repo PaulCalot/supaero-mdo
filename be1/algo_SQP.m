@@ -152,22 +152,17 @@ while(fin==0)
     x_seq = [x_seq; tempx'];
     
     
-    if norm(dk) < 0.01*une_tol_x
+    if (norm(dk) < une_tol_x) && (norm(feval(des_c,tempx)) < 1e-6) && (norm(gldex) < 0.01*une_tol_g)
         fin = 1;
         % Insert patience criteria
+    end     
+    
+    
+    if(k==un_nit_max)
+        fin = 3;        
     end
     
-    if norm(gldex) < 0.01*une_tol_g
-        fin = 2;
-        % Insert patience criteria
-    end
-            
- 
- 
-    if(k==un_nit_max)
-        fin =  3                                                           ;
-    end
-    k = k +1 ;
+    k = k + 1;
 end
 x_opt    =   tempx                                                         ;
 f_opt    =    fdex                                                         ;

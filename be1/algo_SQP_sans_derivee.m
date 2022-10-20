@@ -158,20 +158,21 @@ while(fin==0)
     B = [-gfdex; -cdex];
     X = M\B; % d and lambda
 
-    if (norm(gldex) < 0.01*une_tol_g) && (norm(dk) < 0.01*une_tol_x)
-        fin = 2;
+    if (norm(dk) < une_tol_x) && (norm(feval(des_c,tempx)) < 1e-6) && (norm(gldex) < 0.01*une_tol_g)
+        fin = 1;
         % Insert patience criteria
-    end    
-
+    end     
+    
+    
     if(k==un_nit_max)
-        fin =  3                                                           ;
+        fin = 3;        
     end
     
 end
 x_opt    =   tempx                                                         ;
 f_opt    =    fdex                                                         ;
 
-fprintf('The optimal value of x is X = (%6.4f, %6.4f) and the value of f is %6.4f.\n\n',x_opt(1),x_opt(2),f_opt)
+% fprintf('The optimal value of x is X = (%6.4f, %6.4f) and the value of f is %6.4f.\n\n',x_opt(1),x_opt(2),f_opt)
 nit      =   k                                                             ;
 
 end
