@@ -128,9 +128,6 @@ x_seq = tempx';
 
 while(fin==0)
     k = k + 1;
-%     if isequal(k/10,round(k/10))
-%         disp(k)
-%     end
     dk = X(1:n); 
     templambda = X(n+1:end);
     tempx = tempx + dk;
