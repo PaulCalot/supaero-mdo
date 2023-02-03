@@ -77,7 +77,7 @@ xb = xt + B.sqrtdot(randn(n))
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                          (4) Generate the observations
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-y = # TO DO
+y = obs.hop(xt) + sigmaR*randn(len(space_inds_obs)) # TO DO
 
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                          (5) Variational data assimilation
@@ -90,8 +90,8 @@ while iter_outer < max_outer: # Gauss-Newton loop
     A = Hessian3dVar(obs,R,B)    # Define the Hessian matrix (Binv + HtRinvH)
     # TO DO                      # Complete Hessian3dVar in operators.py
 
-    d = # TO DO                # MISFIT
-    b = # TO DO                # Right hand side vector (Binv(xb - xa) + Ht*Rinv*d)
+    d = y - obs.hop(xa) # obs.misfit(y, xt) # MISFIT
+    b = B.invdot(xb - xa) + obs.adj_hop(R.invdot(d))  # Right hand side vector (Binv(xb - xa) + Ht*Rinv*d)
     print('{:<9d}{:<20.2f}{:<9.2f}'.format(iter_outer, funcval(xa), norm(b)))
     if norm(b) < tol_grad:
         break

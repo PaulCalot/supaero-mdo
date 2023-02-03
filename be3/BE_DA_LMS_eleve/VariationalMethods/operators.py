@@ -1,7 +1,7 @@
 # Class for operators 
 # Programming S. Gurol (CERFACS), 2021
 #  Include Diffusion operator for B ( O. Goux (CERFACS), 2021 )
-
+import numpy as np
 from numpy.core.numeric import zeros, zeros_like
 from numpy import eye, copy, shape, array, ndarray, ones, sqrt, pi
 from numpy.random import randn#, default_rng
@@ -241,8 +241,9 @@ class Hessian3dVar:
         self.obs = obs
         self.R = R
         self.B = B
-    def dot(self,dx):
-        # return dy = (Binv + HtRinvH) *dx
+    def dot(self, dx):
+        # return dy = (Binv + HtRinvH) *dx = Bin(dx) + Ht(Rinv(H(dx)))
+        dy = self.B.invdot(dx) + self.obs.adj_hop(self.R.invdot(self.obs.hop(dx)))
         return dy
 
 class Hessian4dVar:

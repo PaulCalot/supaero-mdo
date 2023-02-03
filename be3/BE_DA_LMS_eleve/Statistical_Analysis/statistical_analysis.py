@@ -1,11 +1,12 @@
 # Statistical Analysis
 # Programming: Selime Gurol (CERFACS), 2021
 
+import numpy as np
 from numpy import zeros, eye, exp
 from numpy.linalg import \
-(inv,# To invert a matrix
-norm,# To compute the Euclidean norm
-cholesky) # To compute Cholesky factorization
+    (inv,# To invert a matrix
+    norm,# To compute the Euclidean norm
+    cholesky) # To compute Cholesky factorization
 from numpy.random import randn # To generate samples from a normalized Gaussian
 import matplotlib.pyplot as plt # To plot a grapH
 
@@ -18,7 +19,7 @@ n  = 4  # state space dimension
 # Observation operator
 I = eye(n)
 inds_obs = [3] # Location of the observations (1 dimensional grid)
-H = I[inds_obs] # H as a selection operator
+H = I[inds_obs] # H as a selection operator - H is size m x n
 m = len(inds_obs) # number of observations
 
 # Observation errors
@@ -54,20 +55,22 @@ xt = randn(n) # the true state
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                          (3) Generate the background
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-xb = # TO DO (use B12)
+xb = xt + np.einsum('ij,jm->im', B12, randn(n, m))
 
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                          (4) Generate the observations
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-y = # TO DO
+y = np.einsum('mn, n-> m', H, xt) + np.sqrt(R) * randn(1, m) # as long as R is diagonal
 
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                          (5) Obtain analysis from BLUE
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #Kalman Gain matrix
-K = # TO DO
+BGt = np.matmul(B, H.T)
+K = np.matmul(BGt, inv(np.matmul(H, BGt) + R)) # TO DO
+print(K)
 #BLUE analysis
-xa = # TO DO
+xa = xb + K * (y - H * xb)
 
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #                          (5) Diagnostics
