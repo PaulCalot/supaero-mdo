@@ -14,7 +14,7 @@ from scipy import ndimage
 from scipy.ndimage.filters import gaussian_filter1d
 import matplotlib.pyplot as plt # To plot a graph
 
-from solvers import pcg
+# from solvers import pcg
 
 from scipy import signal
 
